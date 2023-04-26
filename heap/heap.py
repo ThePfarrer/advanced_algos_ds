@@ -1,9 +1,10 @@
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class Pair:
-    element: str
+    element: Any
     priority: int
 
 
@@ -11,7 +12,7 @@ class Heap:
     def __init__(self, pairs=[], branches=2):
         self.pairs = pairs
         self.branches = branches
-        self.hash_map = {}
+        # self.hash_map = {}
 
         if not self.is_empty():
             self._heapify()
@@ -39,7 +40,7 @@ class Heap:
             raise RuntimeError("Method peek called on an empty heap.")
         p = self.pairs.pop()
         if not self.pairs:
-            return p
+            return p.element
         else:
             element = self.pairs[0].element
             self.pairs[0] = p
@@ -58,9 +59,9 @@ class Heap:
 
         parent_index = self._get_parent_index(index, self.branches)
 
-        if self.pairs[parent_index].priority < self.pairs[index].priority:
+        if self.pairs[parent_index].priority > self.pairs[index].priority:
             self._bubble_up(self.pairs, index)
-        elif self.pairs[parent_index].priority > self.pairs[index].priority:
+        elif self.pairs[parent_index].priority < self.pairs[index].priority:
             self._push_down(self.pairs, index)
 
     def update(self, element, new_priority):
@@ -68,47 +69,47 @@ class Heap:
         if index >= 0:
             old_priority = self.pairs[index].priority
             self.pairs[index] = Pair(element, new_priority)
-            if old_priority < new_priority:
+            if old_priority > new_priority:
                 self._bubble_up(self.pairs, index)
-            elif old_priority > new_priority:
+            elif old_priority < new_priority:
                 self._push_down(self.pairs, index)
 
     def _bubble_up(self, pairs, index):
         current = pairs[index]
         while index > 0:
             parent_index = self._get_parent_index(index)
-            if pairs[parent_index].priority < current.priority:
+            if pairs[parent_index].priority > current.priority:
                 pairs[index] = pairs[parent_index]
-                self.hash_map[pairs[index].element] = index
+                # self.hash_map[pairs[index].element] = index
                 index = parent_index
             else:
                 break
         pairs[index] = current
-        self.hash_map[pairs[index].element] = index
+        # self.hash_map[pairs[index].element] = index
 
     def _push_down(self, pairs, index=0):
         current = pairs[index]
         while index < self._first_leaf_index(pairs):
             (child, child_index) = self._highest_priority_child(index)
-            if child.priority > current.priority:
+            if child.priority < current.priority:
                 pairs[index] = pairs[child_index]
-                self.hash_map[pairs[index].element] = index
+                # self.hash_map[pairs[index].element] = index
                 index = child_index
             else:
                 break
         pairs[index] = current
-        self.hash_map[pairs[index].element] = index
+        # self.hash_map[pairs[index].element] = index
 
-    def contains(self, elem):
-        index = self.hash_map.get(elem, -1)
-        return index >= 0
+    # def contains(self, elem):
+    #     index = self.hash_map.get(elem, -1)
+    #     return index >= 0
 
-    def tuple_index(self, element, pairs):
-        for ind, el in enumerate(pairs):
-            if el.element == element:
-                return ind
-
-        raise IndexError("Element not in array.")
+    # def tuple_index(self, element, pairs):
+    #     for ind, el in enumerate(pairs):
+    #         if el.element == element:
+    #             return ind
+    #
+    #     raise IndexError("Element not in array.")
 
     def _get_parent_index(self, index):
         return int((index - 1) / self.branches)
@@ -126,7 +127,7 @@ class Heap:
         highest_priority = child_indx[0]
 
         for ind in child_indx[1:]:
-            if self.pairs[ind].priority > self.pairs[highest_priority].priority:
+            if self.pairs[ind].priority < self.pairs[highest_priority].priority:
                 highest_priority = ind
 
         return self.pairs[highest_priority], highest_priority
