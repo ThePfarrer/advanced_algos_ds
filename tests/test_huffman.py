@@ -15,7 +15,7 @@ text_counter = {"a": 57, "b": 22, "c": 7, "d": 6, "e": 5, "f": 3}
 
 
 def test_huffman():
-    assert code_frequency == huffman.huffman(text)
+    assert code_frequency == huffman.huffman(text, 2)
 
 
 def test_compute_frequencies():

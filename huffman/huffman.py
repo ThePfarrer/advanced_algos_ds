@@ -17,11 +17,11 @@ class TreeNode:
         self.sort_index = self.freq
 
 
-def huffman(text):
+def huffman(text: str, branching_factor: int):
     # char_frequencie_map = compute_frequencies(text)
     # priority_queue = []
 
-    return build_table(heap_to_tree(freq_to_heap(compute_frequencies(text))), "", {})
+    return build_table(heap_to_tree(freq_to_heap(compute_frequencies(text), branching_factor)), "", {})
 
 
 def build_table(node, sequence, chars_to_sequence_map):
@@ -40,12 +40,12 @@ def compute_frequencies(txt):
     return collections.Counter(txt)
 
 
-def freq_to_heap(freq_map):
+def freq_to_heap(freq_map, branching_factor=2):
     heap = []
     for ch, freq in freq_map.items():
-        heap.append(Pair(TreeNode(ch, freq), freq))
+        heap.append(Pair(TreeNode(str(ch), freq), freq))
 
-    return Heap(heap)
+    return Heap(heap, branching_factor)
 
 
 def heap_to_tree(heap):
