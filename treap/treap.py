@@ -6,15 +6,20 @@ from typing import Any
 class Node:
     key: str
     priority: float
-    left: Any
-    right: Any
-    parent: Any
+    left: Any = None
+    right: Any = None
+    parent: Any = None
 
-    def set_left(self, value):
-        self.left = value
-        if value is not None:
-            value.parent = 
+    def _set_left(self, left):
+        self.left = left
+        if left is not None:
+            left.parent = self
+
+    def _set_right(self, right):
+        self.right = right
+        if right is not None:
+            right.parent = self
 
 
 class Treap:
-    root: Node
+    root: Node = None
