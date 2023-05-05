@@ -20,6 +20,22 @@ class Node:
         if right is not None:
             right.parent = self
 
+    def is_root(self):
+        return self.parent is None
+
+    def search(self, key, priority):
+        pass
+
+    def add(self, key, priority):
+        pass
+
+    def _left_rotate(self):
+        pass
+
+    def _right_rotate(self):
+        if self.is_root():
+            return
+
 
 class Treap:
     root: Node = None
